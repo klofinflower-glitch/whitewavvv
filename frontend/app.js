@@ -1,3 +1,6 @@
+const BACKEND_URL = 'https://whitewavvv.onrender.com'; // URL с Render
+const BOT_USERNAME = 'whitewavestore_bot';
+
 // Basic store with persistence
 const store = {
   gender: 'men',
@@ -18,7 +21,7 @@ const store = {
       { id:'women-coats', title:'Верхняя одежда' },
       { id:'women-tees', title:'Футболки' }
     ]
-  },
+  }`
   products: [
     { id: 'p1', title: 'Куртка SoftShell', brand: 'WHITEWAVE', price: 5061, gender: 'women', cat:'women-coats' },
     { id: 'p2', title: 'Жакет Oversize', brand: 'WHITEWAVE', price: 6699, gender: 'women', cat:'women-coats' },
