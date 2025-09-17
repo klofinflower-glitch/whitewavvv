@@ -1,0 +1,34 @@
+[
+  {
+    "id": "p1",
+    "title": "Куртка SoftShell",
+    "brand": "WHITEWAVE",
+    "price": 5061,
+    "gender": "women",
+    "cat": "women-coats"
+  },
+  {
+    "id": "p2",
+    "title": "Жакет Oversize",
+    "brand": "WHITEWAVE",
+    "price": 6699,
+    "gender": "women",
+    "cat": "women-coats"
+  },
+  {
+    "id": "p3",
+    "title": "Бомбер Varsity",
+    "brand": "WHITEWAVE",
+    "price": 6073,
+    "gender": "men",
+    "cat": "men-coats"
+  },
+  {
+    "id": "p4",
+    "title": "Ветровка Logo",
+    "brand": "WHITEWAVE",
+    "price": 12521,
+    "gender": "men",
+    "cat": "men-coats"
+  }
+]

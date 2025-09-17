@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <title>WHITEWAVE — Mini App</title>
+  <link rel="icon" href="assets/favicon.svg"/>
+  <link rel="stylesheet" href="styles.css"/>
+  <script defer src="app.js"></script>
+  <!-- Telegram SDK (Telegram injects this in webview, держим на случай локального просмотра) -->
+  <!-- <script src="https://telegram.org/js/telegram-web-app.js"></script> -->
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div class="left"><button class="back" id="btnBack" aria-label="Назад">‹</button></div>
+      <div class="title">WHITEWAVE</div>
+      <div class="right"><button id="btnMenu" aria-label="Меню">⋯</button></div>
+    </header>
+
+    <main>
+      <!-- HOME -->
+      <section id="page-home" class="page active">
+        <div class="banner">
+          <div class="banner__title">WHITEWAVE 🎉</div>
+          <div class="banner__subtitle">Скидки до 50% и призы</div>
+        </div>
+
+        <h2>Каталог</h2>
+        <div class="chips">
+          <button class="chip chip--active" data-gender="men">Мужчинам</button>
+          <button class="chip" data-gender="women">Женщинам</button>
+        </div>
+        <div id="categoryGrid" class="category-grid"></div>
+      </section>
+
+      <!-- CATEGORY LIST -->
+      <section id="page-category" class="page">
+        <div class="category-header">
+          <h2 id="catTitle">Категория</h2>
+          <div class="search">
+            <input id="catSearch" type="search" placeholder="Поиск по категории"/>
+          </div>
+          <div class="sortbar"><label>Сортировать:</label><select id="sortSelect"><option value="popular">по популярности</option><option value="price_up">цена ↑</option><option value="price_down">цена ↓</option></select></div>
+<div class="filters" id="filterRow"><div class="filter-panel"><div class="price-range">Цена до: <span id="priceMaxVal">20000</span> ₽ <input type="range" id="priceMax" min="0" max="20000" step="1000" value="20000"/></div><div class="brand-filter" id="brandFilter"></div><div class="size-filter" id="sizeFilter"></div></div>
+            <button class="chip" data-filter="size">Размер</button>
+            <button class="chip" data-filter="price">Цена</button>
+            <button class="chip" data-filter="brand">Бренд</button>
+            <button class="chip" data-filter="fast">Быстрая доставка</button>
+          </div>
+        </div>
+        <div id="catGrid" class="product-grid"></div>
+      </section>
+
+      <!-- FAVORITES -->
+      <section id="page-fav" class="page">
+        <div class="empty">
+          <img src="assets/heart.svg" alt=""/>
+          <h3>Избранные товары</h3>
+          <p>Нажимай на сердечки — они появятся здесь.</p>
+        </div>
+        <div id="favGrid" class="product-grid"></div>
+      </section>
+
+      <!-- CART -->
+      <section id="page-cart" class="page">
+        <div id="cartEmpty" class="empty">
+          <img src="assets/bag.svg" alt=""/>
+          <h3>Корзина</h3>
+          <p>Пока пусто. Загляни в каталог!</p>
+        </div>
+        <div id="cartList" class="cart-list"></div>
+        <div id="cartFooter" class="cart-footer">
+          <div class="total"><span>Итого:</span><strong id="cartTotal">0 ₽</strong></div>
+          <button id="checkoutBtn" class="btn-primary">Оформить</button>
+        </div>
+      </section>
+
+      <!-- CHECKOUT -->
+      <section id="page-checkout" class="page">
+        <h2>Оформление</h2>
+        <form id="checkoutForm" class="form">
+          <label>Имя<input name="name" required placeholder="Как к вам обращаться"/></label>
+          <label>Телефон<input name="phone" required placeholder="+7..."/></label>
+          <label>Адрес доставки<textarea name="address" rows="3" required placeholder="Город, улица, дом, квартира"/></label>
+          <label>Промокод<input name="promo" placeholder="Например: WELCOME10"/></label>
+<label>Способ оплаты
+            <select name="pay" required>
+              <option value="cod">Курьеру</option>
+              <option value="card">Картой</option>
+            </select>
+          </label>
+          <button class="btn-primary" type="submit">Подтвердить заказ</button>
+        </form>
+      </section>
+
+      <!-- FRIENDS / REFERRAL -->
+      <section id="page-friends" class="page">
+        <div class="ref-card">
+          <h3>Приглашай друзей</h3>
+          <p>Другу — 500 ₽ сразу, тебе — после первого заказа друга.</p>
+          <button id="inviteBtn" class="btn-primary">Пригласить друга  • 500 ₽</button>
+        </div>
+        <div class="ref-stats">
+          <div><strong id="invCount">0</strong><span>приглашений</span></div>
+          <div><strong id="subsCount">0</strong><span>подписок</span></div>
+          <div><strong id="earnCount">0 ₽</strong><span>заработано</span></div>
+        </div>
+      </section>
+
+      <!-- SETTINGS / PROFILE -->
+      <section id="page-orders" class="page">
+        <h2>Мои заказы</h2>
+        <div id="ordersList" class="orders-list"></div>
+      </section>
+
+      <section id="page-settings" class="page">
+        <div class="profile-card">
+          <div class="avatar">W</div>
+          <div>
+            <div class="nick" id="nick">whitewave_user</div>
+            <div class="status">Статус: <strong id="level">Новичок</strong></div>
+          </div>
+        </div>
+        <div class="list">
+          <a class="item"><span>Баланс</span><strong id="balance">0 ₽</strong></a>
+          <a class="item" id="openOrders"><span>Заказы</span><strong id="ordersCount">0</strong></a>
+          <a class="item"><span>Избранное</span><strong id="favCount">0</strong></a>
+          <a class="item"><span>Уведомления</span></a>
+          <a class="item"><span>Поддержка</span></a>
+        </div>
+      </section>
+    </main>
+
+    <nav class="tabbar">
+      <button class="tab active" data-target="home"><span class="icon">🏠</span><span>Главная</span></button>
+      <button class="tab" data-target="fav"><span class="icon">💖</span><span>Избранное</span></button>
+      <button class="tab" data-target="cart"><span class="icon">🛍️</span><span>Корзина</span><em id="cartBadge" class="badge hidden">0</em></button>
+      <button class="tab" data-target="friends"><span class="icon">👥</span><span>Друзья</span></button>
+      <button class="tab" data-target="settings"><span class="icon">⚙️</span><span>Настройки</span></button>
+    </nav>
+  </div>
+
+  <!-- Product card template -->
+  <template id="tpl-product">
+    <div class="product-card">
+      <button class="fav-btn" aria-label="В избранное">♡</button>
+      <div class="img"></div>
+      <div class="info">
+        <div class="brand"></div>
+        <div class="title"></div>
+        <div class="price"></div>
+      </div>
+      <button class="btn-add">В корзину</button>
+    </div>
+  </template>
+
+  <!-- Product detail bottom sheet -->
+  <div id="productDetail">
+    <div class="detail-backdrop"></div>
+    <div class="detail-sheet">
+      <div class="detail-handle"></div>
+      <div class="detail-img"></div>
+      <div class="detail-gallery" id="detailGallery"></div>
+      <div class="detail-body">
+        <div class="detail-brand"></div>
+        <h3 class="detail-title"></h3>
+        <div class="detail-price"></div>
+        <div class="detail-size">
+          <div class="size-label">Цвет</div>
+        <div class="color-row" id="colorRow"></div>
+        <div class="size-label">Размер</div>
+          <div class="size-row"></div>
+        </div>
+        <button class="btn-primary detail-add">В корзину</button>
+      <div class="related"><h3>Похожие</h3><div class="related-row" id="relatedRow"></div></div>
+      </div>
+    </div>
+  </div>
+  <div id="toast"></div>
+</body>
+</html>
