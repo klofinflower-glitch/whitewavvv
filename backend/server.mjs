@@ -60,4 +60,4 @@ app.get('/ref', (req,res)=>{
 });
 
 const port = process.env.PORT || 3000;
-app.listen(port, ()=> console.log('WHITEWAVE backend on http://localhost:'+port));
+app.listen(port, () => console.log('WHITEWAVE backend on http://localhost:' + port));
